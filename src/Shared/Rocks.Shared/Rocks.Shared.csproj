@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OpenCvSharp4" Version="4.5.3.20210817" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>

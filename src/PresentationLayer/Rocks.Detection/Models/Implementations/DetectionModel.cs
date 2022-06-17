@@ -56,7 +56,7 @@ namespace Rocks.Detection.Models.Implementations
                             {
                                 var res = await DetectionService.Detect(frame);
 
-                                Cv2.DrawContours(frame, res.SelectMany(x => x).Select(polygon =>
+                                Cv2.DrawContours(frame, res.SelectMany(x => x.Polygon).Select(polygon =>
                                 {
                                     var x = polygon.Where((x, i) => i % 2 == 0);
                                     var y = polygon.Where((x, i) => i % 2 != 0);

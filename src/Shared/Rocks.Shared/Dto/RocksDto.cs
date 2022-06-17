@@ -2,7 +2,7 @@
 
 namespace Rocks.Shared.Dto
 {
-    public class RocksDto:List<List<List<double>>>
+    public class RocksDto:List<RockDto>
     {
     }
 }
