@@ -1,0 +1,21 @@
+﻿<Window
+    x:Class="Rocks.Views.Shell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Rocks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:sh="clr-namespace:Rocks.PresentationLayer.Shared.Views;assembly=Rocks.PresentationLayer.Shared"
+    xmlns:vm="clr-namespace:Rocks.ViewModels"
+    Title="Камни"
+    d:DataContext="{d:DesignInstance Type=vm:ShellViewModel}"
+    d:Height="800"
+    d:Width="1200"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <TabControl Style="{StaticResource MaterialDesignAppBarTabControl}">
+        <TabItem prism:RegionManager.RegionName="{x:Static sh:GlobalRegions.Detection}" Header="Главная" />
+        <TabItem Header="Настройки" />
+    </TabControl>
+</Window>

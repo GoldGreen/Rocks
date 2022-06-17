@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.5.3.20210817" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.4.15" />
+    <PackageReference Include="ReactiveUI.WPF" Version="16.4.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rocks.Detection\Rocks.Detection.csproj" />
+    <ProjectReference Include="..\Rocks.PresentationLayer.Shared\Rocks.PresentationLayer.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
