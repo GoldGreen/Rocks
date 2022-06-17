@@ -1,5 +1,4 @@
-﻿using OpenCvSharp;
-using Rocks.BusinessLayer.Abstractions;
+﻿using Rocks.BusinessLayer.Abstractions;
 using Rocks.DataLayer.Abstractions;
 using Rocks.Shared.Data;
 using System.Collections.Generic;
@@ -17,12 +16,12 @@ namespace Rocks.BusinessLayer.Implementations
             VideoDeviceResolver = videoDeviceResolver;
         }
 
-        public IEnumerable<Mat> LoadFramesFromCamera(int cameraId)
+        public IVideoFrames LoadFramesFromCamera(int cameraId)
         {
             return VideoReader.LoadFrames(new VideoCaptureCameraFactory(cameraId));
         }
 
-        public IEnumerable<Mat> LoadFramesFromFile(string fileName)
+        public IVideoFrames LoadFramesFromFile(string fileName)
         {
             return VideoReader.LoadFrames(new VideoCaptureFileFactory(fileName));
         }

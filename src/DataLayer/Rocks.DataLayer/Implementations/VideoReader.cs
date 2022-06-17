@@ -1,24 +1,12 @@
-﻿using OpenCvSharp;
-using Rocks.DataLayer.Abstractions;
-using System.Collections.Generic;
-using System.Threading;
+﻿using Rocks.DataLayer.Abstractions;
 
 namespace Rocks.DataLayer.Implementations
 {
     internal class VideoReader : IVideoReader
     {
-        public IEnumerable<Mat> LoadFrames(IVideoCaptureFactory videoFactory)
+        public IVideoFrames LoadFrames(IVideoCaptureFactory videoFactory)
         {
-            using var videoCapture = videoFactory.Create();
-            while (true)
-            {
-                using Mat frame = new();
-                if (!videoCapture.Read(frame))
-                {
-                    break;
-                }
-                yield return frame;
-            }
+            return new VideoFrames(videoFactory.Create());
         }
     }
 }

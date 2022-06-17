@@ -1,23 +1,30 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Rocks.BusinessLayer.Abstractions;
 using System;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace Rocks.BusinessLayer.Implementations
 {
-    public class RpcClientBase : IDisposable
+    internal class RpcClient<TRequest, TResponce> : IRpcClient<TRequest, TResponce>
     {
+        public IRequestConverter<TRequest> RequestConverter { get; }
+        public IResponceConverter<TResponce> ResponceConverter { get; }
+        public IQueueName<TRequest, TResponce> QueueName { get; }
+
         private readonly IConnection connection;
         private readonly IModel channel;
         private readonly string replyQueueName;
         private readonly EventingBasicConsumer consumer;
-        private readonly BlockingCollection<byte[]> respQueue = new();
+        private readonly BlockingCollection<TResponce> respQueue = new();
         private readonly IBasicProperties props;
-        private readonly string routingKey;
 
-        public RpcClientBase(string routingKey)
+        public RpcClient(IRequestConverter<TRequest> requestConverter, IResponceConverter<TResponce> responceConverter, IQueueName<TRequest, TResponce> queueName)
         {
-            this.routingKey = routingKey;
+            RequestConverter = requestConverter;
+            ResponceConverter = responceConverter;
+            QueueName = queueName;
 
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
@@ -34,10 +41,12 @@ namespace Rocks.BusinessLayer.Implementations
             consumer.Received += (model, ea) =>
             {
                 byte[] body = ea.Body.ToArray();
-                if (ea.BasicProperties.CorrelationId == correlationId)
+                if (ea.BasicProperties.CorrelationId != correlationId)
                 {
-                    respQueue.Add(body);
+                    return;
                 }
+
+                respQueue.Add(ResponceConverter.Convert(body));
             };
 
             channel.BasicConsume(
@@ -46,15 +55,19 @@ namespace Rocks.BusinessLayer.Implementations
                 autoAck: true);
         }
 
-        public byte[] Call(byte[] messageBytes)
+        public TResponce Send(TRequest request)
         {
             channel.BasicPublish(
                 exchange: "",
-                routingKey: routingKey,
+                routingKey: QueueName.QueueName,
                 basicProperties: props,
-                body: messageBytes);
+                body: RequestConverter.Convert(request));
 
             return respQueue.Take();
+        }
+        public Task<TResponce> SendAsync(TRequest request)
+        {
+            return Task.Run(() => Send(request));
         }
 
         public void Dispose()

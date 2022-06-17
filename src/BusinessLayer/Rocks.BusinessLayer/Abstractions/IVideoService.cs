@@ -1,4 +1,4 @@
-﻿using OpenCvSharp;
+﻿using Rocks.DataLayer.Abstractions;
 using Rocks.Shared.Data;
 using System.Collections.Generic;
 
@@ -6,8 +6,8 @@ namespace Rocks.BusinessLayer.Abstractions
 {
     public interface IVideoService
     {
-        IEnumerable<Mat> LoadFramesFromFile(string fileName);
-        IEnumerable<Mat> LoadFramesFromCamera(int cameraId);
+        IVideoFrames LoadFramesFromFile(string fileName);
+        IVideoFrames LoadFramesFromCamera(int cameraId);
         IEnumerable<VideoDeviceInfo> GetVideoDevices();
     }
 }

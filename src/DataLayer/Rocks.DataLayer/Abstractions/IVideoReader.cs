@@ -1,10 +1,7 @@
-﻿using OpenCvSharp;
-using System.Collections.Generic;
-
-namespace Rocks.DataLayer.Abstractions
+﻿namespace Rocks.DataLayer.Abstractions
 {
     public interface IVideoReader
     {
-        IEnumerable<Mat> LoadFrames(IVideoCaptureFactory videoFactory);
+        IVideoFrames LoadFrames(IVideoCaptureFactory videoFactory);
     }
 }

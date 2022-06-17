@@ -2,10 +2,9 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Rocks.BusinessLayer.Abstractions;
-using Rocks.BusinessLayer.Implementations;
+using Rocks.DataLayer.Abstractions;
 using Rocks.Detection.Models.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,15 +14,15 @@ namespace Rocks.Detection.Models.Implementations
     internal class DetectionModel : ReactiveObject, IDetectionModel
     {
         public IVideoService VideoService { get; }
-        public RocksRpcClient RocksRpcClient { get; }
+        public IDetectionService DetectionService { get; }
         [Reactive] public Mat CurrentFrame { get; set; }
         [Reactive] public bool ReadingFrames { get; set; }
         [Reactive] public bool Paused { get; set; }
 
-        public DetectionModel(IVideoService videoService, RocksRpcClient rocksRpcClient)
+        public DetectionModel(IVideoService videoService, IDetectionService detectionService)
         {
             VideoService = videoService;
-            RocksRpcClient = rocksRpcClient;
+            DetectionService = detectionService;
         }
 
         public Task StartVideoFromFile(string fileName, CancellationTokenSource cancellationTokenSource)
@@ -36,7 +35,7 @@ namespace Rocks.Detection.Models.Implementations
             return StartVideo(() => VideoService.LoadFramesFromCamera(cameraId), cancellationTokenSource);
         }
 
-        private async Task StartVideo(Func<IEnumerable<Mat>> framesFactory, CancellationTokenSource cancellationTokenSource)
+        private async Task StartVideo(Func<IVideoFrames> framesFactory, CancellationTokenSource cancellationTokenSource)
         {
             if (ReadingFrames)
             {
@@ -48,13 +47,14 @@ namespace Rocks.Detection.Models.Implementations
             (
                 async () =>
                 {
-                    foreach (var frame in framesFactory())
+                    using var frames = framesFactory();
+                    foreach (var frame in frames.GetFrames())
                     {
                         await System.Windows.Application.Current.Dispatcher.Invoke
                         (
                             async () =>
                             {
-                                var res = await RocksRpcClient.Call(frame);
+                                var res = await DetectionService.Detect(frame);
 
                                 Cv2.DrawContours(frame, res.SelectMany(x => x).Select(polygon =>
                                 {
