@@ -8,9 +8,4 @@
     <ProjectReference Include="..\..\DataLayer\Rocks.DataLayer\Rocks.DataLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="Implementations\" />
-  </ItemGroup>
-
 </Project>

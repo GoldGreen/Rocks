@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Rocks.Shared\Rocks.Shared.csproj" />
+    <PackageReference Include="DirectShowLib" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="Implementations\" />
+    <ProjectReference Include="..\..\Shared\Rocks.Shared\Rocks.Shared.csproj" />
   </ItemGroup>
 
 </Project>
