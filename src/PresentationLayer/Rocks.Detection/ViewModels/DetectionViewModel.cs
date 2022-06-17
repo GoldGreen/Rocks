@@ -7,6 +7,7 @@ using Rocks.Detection.Models.Abstractions;
 using Rocks.PresentationLayer.Shared.Extensions;
 using System;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -18,9 +19,12 @@ namespace Rocks.Detection.ViewModels
         public IDialogService DialogService { get; }
 
         [Reactive] public ImageSource CurrentFrame { get; set; }
+        [Reactive] public CancellationTokenSource CancellationTokenSource { get; set; }
 
         public ICommand OpenCameraCommand { get; }
         public ICommand OpenFileCommand { get; }
+        public ICommand StopVideoCommand { get; }
+        public ICommand RevercePauseCommand { get; }
 
         public DetectionViewModel(IDetectionModel model, IDialogService dialogService)
         {
@@ -31,7 +35,9 @@ namespace Rocks.Detection.ViewModels
                  .Select(BitmapSourceConverter.ToBitmapSource)
                  .Subscribe(x => CurrentFrame = x);
 
-            OpenFileCommand = ReactiveCommand.Create(() =>
+            var canStartVideo = Model.WhenAnyValue(x => x.ReadingFrames).Select(x => !x);
+
+            OpenFileCommand = ReactiveCommand.Create(async () =>
             {
                 OpenFileDialog openFileDialog = new();
 
@@ -42,16 +48,35 @@ namespace Rocks.Detection.ViewModels
 
                 if (openFileDialog.ShowDialog() == true)
                 {
+                    CancellationTokenSource = new();
+                    await Model.StartVideoFromFile(openFileDialog.FileName, CancellationTokenSource);
                 }
-            });
+            }, canStartVideo);
 
             OpenCameraCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var (ok, device) = await DialogService.OpenCameraDialog();
+
                 if (ok)
                 {
+                    CancellationTokenSource = new();
+                    await Model.StartVideoFromCamera(device.Id, CancellationTokenSource);
                 }
-            });
+            }, canStartVideo);
+
+            StopVideoCommand = ReactiveCommand.Create(() =>
+            {
+                Model.StopVideo(CancellationTokenSource);
+                CancellationTokenSource = default;
+            }, this.WhenAnyValue(x => x.CancellationTokenSource,
+                                 x => x.Model.ReadingFrames,
+                                 (ct, rf) => ct != null && rf));
+
+            RevercePauseCommand = ReactiveCommand.Create(() =>
+            Model.Paused = !Model.Paused,
+            Model.WhenAnyValue(x => x.CurrentFrame,
+                               x => x.ReadingFrames,
+                               (ct, rf) => ct != null && rf));
         }
     }
 }

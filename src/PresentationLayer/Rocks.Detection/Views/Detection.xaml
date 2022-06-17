@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -62,5 +63,58 @@
             Margin="10"
             Source="{Binding CurrentFrame}"
             Stretch="Uniform" />
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="md:PackIcon">
+                    <Setter Property="Width" Value="60" />
+                    <Setter Property="Height" Value="60" />
+                </Style>
+            </StackPanel.Resources>
+            <Button
+                Width="60"
+                Height="60"
+                Margin="0"
+                Padding="0"
+                VerticalAlignment="Center"
+                Command="{Binding RevercePauseCommand}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatDarkButton}" TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Model.Paused}" Value="False">
+                                <DataTrigger.Setters>
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <md:PackIcon Kind="PauseCircle" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Model.Paused}" Value="True">
+                                <DataTrigger.Setters>
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <md:PackIcon Kind="PlayBox" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button
+                Width="60"
+                Height="60"
+                Margin="10,0,0,0"
+                Padding="0"
+                VerticalAlignment="Center"
+                Command="{Binding StopVideoCommand}">
+                <md:PackIcon Kind="Stop" />
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -11,6 +11,7 @@ namespace Rocks.BusinessLayer
         {
             container.AddDataLayer();
             container.RegisterScoped<IVideoService, VideoService>();
+            container.RegisterSingleton<RocksRpcClient>();
         }
     }
 }
