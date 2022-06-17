@@ -5,12 +5,62 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Rocks.Detection.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:vm="clr-namespace:Rocks.Detection.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:DetectionViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <TextBlock Text="Детекция" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
+            <Menu Height="40">
+                <Menu.Resources>
+                    <Style BasedOn="{StaticResource MaterialDesignBody1TextBlock}" TargetType="TextBlock">
+                        <Setter Property="Margin" Value="10,-6,0,0" />
+                    </Style>
+                </Menu.Resources>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="VideoPlus" />
+                            <TextBlock Text="Открыть видеопоток" />
+                        </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem Command="{Binding OpenFileCommand}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="File" />
+                                <TextBlock Text="Из файла" />
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Command="{Binding OpenCameraCommand}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Kind="Camera" />
+                                <TextBlock Text="С камеры" />
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+        <Image
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10"
+            Source="{Binding CurrentFrame}"
+            Stretch="Uniform" />
     </Grid>
 </UserControl>
