@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Rocks.Shared.Dto
 {
-    public class RockDto
+    public class DetectionDto
     {
         [JsonProperty("prediction_class")]
         public int PredictionClass { get; set; }

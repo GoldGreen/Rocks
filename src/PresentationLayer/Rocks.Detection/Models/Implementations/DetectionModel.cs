@@ -2,10 +2,10 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Rocks.BusinessLayer.Abstractions;
+using Rocks.BusinessLayer.Data;
 using Rocks.DataLayer.Abstractions;
 using Rocks.Detection.Models.Abstractions;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,14 +54,12 @@ namespace Rocks.Detection.Models.Implementations
                         (
                             async () =>
                             {
-                                var res = await DetectionService.Detect(frame);
+                                var rocks = await DetectionService.Detect(frame);
 
-                                Cv2.DrawContours(frame, res.SelectMany(x => x.Polygon).Select(polygon =>
+                                foreach (var rock in rocks)
                                 {
-                                    var x = polygon.Where((x, i) => i % 2 == 0);
-                                    var y = polygon.Where((x, i) => i % 2 != 0);
-                                    return x.Zip(y, (x, y) => new Point(x, y)).ToArray();
-                                }).ToArray(), -1, Scalar.Red, 5);
+                                    DrawRock(frame, rock);
+                                }
 
                                 CurrentFrame = frame;
 
@@ -89,6 +87,16 @@ namespace Rocks.Detection.Models.Implementations
                 cancellationTokenSource.Cancel();
                 ReadingFrames = false;
             }
+        }
+
+        private static void DrawRock(Mat frame, Rock rock, double alpha = 0.1)
+        {
+            var clone = frame.EmptyClone();
+
+            Cv2.DrawContours(clone, rock.Polygones, -1, Scalar.Red, -1);
+
+            Cv2.AddWeighted(clone, alpha, frame, 1, 0, frame);
+            //Cv2.Rectangle(frame, rock.Rectangle, Scalar.DarkRed, 4);
         }
     }
 }

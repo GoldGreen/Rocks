@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Rocks.BusinessLayer.Abstractions;
+using Rabbit.Rpc.Abstractions;
 using System.Text;
 
-namespace Rocks.BusinessLayer.Implementations
+namespace Rabbit.Rpc.Implementations
 {
     internal class JsonResponceConverter<T> : IResponceConverter<T>
     {

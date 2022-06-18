@@ -2,7 +2,7 @@
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Mvvm;
-using Rocks.BusinessLayer.Abstractions;
+using Rabbit.Rpc.Abstractions;
 using Rocks.Configuration;
 using Rocks.Shared.Dto;
 using Rocks.ViewModels;
@@ -18,7 +18,7 @@ namespace Rocks
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterScoped<IQueueName<Mat, RocksDto>, RocksQueueName>();
+            containerRegistry.RegisterScoped<IQueueName<Mat, DetectioinResultDto>, RocksQueueName>();
             ViewModelLocationProvider.Register<Shell, ShellViewModel>();
         }
     }

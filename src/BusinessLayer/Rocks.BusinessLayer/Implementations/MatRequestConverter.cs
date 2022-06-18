@@ -1,5 +1,5 @@
 ﻿using OpenCvSharp;
-using Rocks.BusinessLayer.Abstractions;
+using Rabbit.Rpc.Abstractions;
 
 namespace Rocks.BusinessLayer.Implementations
 {

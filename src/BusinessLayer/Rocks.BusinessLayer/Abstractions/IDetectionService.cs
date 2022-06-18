@@ -1,11 +1,12 @@
 ﻿using OpenCvSharp;
-using Rocks.Shared.Dto;
+using Rocks.BusinessLayer.Data;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Rocks.BusinessLayer.Abstractions
 {
     public interface IDetectionService
     {
-        Task<RocksDto> Detect(Mat mat);
+        Task<IEnumerable<Rock>> Detect(Mat mat);
     }
 }

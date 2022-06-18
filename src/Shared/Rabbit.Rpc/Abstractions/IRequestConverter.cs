@@ -1,4 +1,4 @@
-﻿namespace Rocks.BusinessLayer.Abstractions
+﻿namespace Rabbit.Rpc.Abstractions
 {
     public interface IRequestConverter<T>
     {

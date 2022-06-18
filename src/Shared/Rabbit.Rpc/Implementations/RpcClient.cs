@@ -1,11 +1,11 @@
-﻿using RabbitMQ.Client;
+﻿using Rabbit.Rpc.Abstractions;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Rocks.BusinessLayer.Abstractions;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace Rocks.BusinessLayer.Implementations
+namespace Rabbit.Rpc.Implementations
 {
     internal class RpcClient<TRequest, TResponce> : IRpcClient<TRequest, TResponce>
     {

@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rocks.PresentationLayer.Sha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rocks.Detection", "PresentationLayer\Rocks.Detection\Rocks.Detection.csproj", "{0B17367A-CD64-4F07-AB0E-6EBFE33814F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit.Rpc", "Shared\Rabbit.Rpc\Rabbit.Rpc.csproj", "{9F4C7AE2-48B1-46A3-A27F-71215B120FE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{0B17367A-CD64-4F07-AB0E-6EBFE33814F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B17367A-CD64-4F07-AB0E-6EBFE33814F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B17367A-CD64-4F07-AB0E-6EBFE33814F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F4C7AE2-48B1-46A3-A27F-71215B120FE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F4C7AE2-48B1-46A3-A27F-71215B120FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F4C7AE2-48B1-46A3-A27F-71215B120FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F4C7AE2-48B1-46A3-A27F-71215B120FE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{A26CF91C-AE92-464A-BDAE-82392167FD44} = {F28224DB-643B-4DED-AF7E-1A60860351C8}
 		{8C1BF45D-D53C-4713-8750-FF96538CDCAF} = {EEC558AA-D81C-4583-9AF5-94C08F5A7BF3}
 		{0B17367A-CD64-4F07-AB0E-6EBFE33814F7} = {EEC558AA-D81C-4583-9AF5-94C08F5A7BF3}
+		{9F4C7AE2-48B1-46A3-A27F-71215B120FE2} = {3879FA46-9B8C-4CAD-B0EA-8CC327CFF618}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA397211-E508-48B3-B33F-191A69AC1FE1}

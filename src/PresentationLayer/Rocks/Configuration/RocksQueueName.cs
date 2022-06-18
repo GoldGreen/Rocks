@@ -1,10 +1,10 @@
 ﻿using OpenCvSharp;
-using Rocks.BusinessLayer.Abstractions;
+using Rabbit.Rpc.Abstractions;
 using Rocks.Shared.Dto;
 
 namespace Rocks.Configuration
 {
-    internal class RocksQueueName : IQueueName<Mat, RocksDto>
+    internal class RocksQueueName : IQueueName<Mat, DetectioinResultDto>
     {
         public string QueueName => Settings.Default.RocksQueueName;
     }
