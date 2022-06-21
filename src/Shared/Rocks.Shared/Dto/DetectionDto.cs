@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Rocks.Shared.Dto
 {
+    [ToString]
     public class DetectionDto
     {
         [JsonProperty("prediction_class")]

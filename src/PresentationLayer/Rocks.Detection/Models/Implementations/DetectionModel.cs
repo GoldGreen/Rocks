@@ -96,6 +96,7 @@ namespace Rocks.Detection.Models.Implementations
             Cv2.DrawContours(clone, rock.Polygones, -1, Scalar.Red, -1);
 
             Cv2.AddWeighted(clone, alpha, frame, 1, 0, frame);
+            Cv2.DrawContours(frame, rock.Polygones, -1, Scalar.Red, 5);
             //Cv2.Rectangle(frame, rock.Rectangle, Scalar.DarkRed, 4);
         }
     }

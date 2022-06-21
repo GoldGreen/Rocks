@@ -66,9 +66,7 @@ namespace Rocks.BusinessLayer.Implementations
 
         private static double CalculateArea(List<Point> points)
         {
-            return Math.Abs(points.Take(points.Count - 1)
-                                  .Select((p, i) => (points[i + 1].X - p.X) * (points[i + 1].Y + p.Y))
-                                  .Sum() / 2);
+            return Cv2.ContourArea(points);
         }
     }
 }
