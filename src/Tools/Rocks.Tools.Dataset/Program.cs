@@ -12,8 +12,8 @@ namespace Rocks.Tools.Dataset
             string imageRoot = Path.Combine(root, "Images");
             string[] annotationsPaths = new string[]
             {
-                "9_coco_imglab.json",
-                "16_coco_imglab.json",
+                //"9_coco_imglab.json",
+                //"16_coco_imglab.json",
                 "21_coco_imglab.json",
                 "annotations.json",
                 "cam37.json"
@@ -34,10 +34,11 @@ namespace Rocks.Tools.Dataset
             {
                 DatasetExtensions.PrepProcess(path, path);
             }
+
             DatasetExtensions.Concat(annotationsPaths, output);
-            DatasetExtensions.AddBackground(backgroundRoot, imageRoot, output, output, 1, 0.8, 0.6);
+            DatasetExtensions.AddBackground(backgroundRoot, imageRoot, output, output, 1, 0.9, 0.38);
             DatasetExtensions.CheckImages(imageRoot, output);
-            DatasetExtensions.Split(imageRoot, output, testAnnotation, trainAnnotation, testPath, trainPath);
+            DatasetExtensions.Split(imageRoot, output, testAnnotation, trainAnnotation, testPath, trainPath, 0.99);
         }
     }
 }

@@ -42,16 +42,27 @@ namespace Rocks.Tools.Dataset
                 img.FileName = Path.GetFileName(img.FileName);
             }
 
+            foreach (var ann in root.Annotations.ToList())
+            {
+                ann.Segmentation.RemoveAll(x => x.Count < 6);
+
+                if (ann.Segmentation.Count == 0)
+                {
+                    root.Annotations.Remove(ann);
+
+                    var img = root.Images.First(x => x.Id == ann.ImageId);
+                    var annotations = root.Annotations.Where(x => x.ImageId == img.Id).ToList();
+
+                    if (annotations.Count == 0)
+                    {
+                        Console.WriteLine($"invalid image delete {img.FileName}");
+                    }
+                }
+            }
+
             foreach (var ann in root.Annotations)
             {
-                var imgs = root.Images.Where(x => x.Id == ann.ImageId);
-
-                if (imgs.Count() > 1)
-                {
-                    throw new Exception("opa");
-                }
-
-                var img = imgs.First();
+                var img = root.Images.First(x => x.Id == ann.ImageId);
 
                 foreach (var segm in ann.Segmentation)
                 {
@@ -172,7 +183,7 @@ namespace Rocks.Tools.Dataset
             var root = JsonConvert.DeserializeObject<Root>(File.ReadAllText(inputPath));
             Random rnd = new(111);
 
-            var backgrounds = Directory.GetFiles(backgroundsFolder);
+            string[] backgrounds = Directory.GetFiles(backgroundsFolder);
 
             int imgId = root.Images.Max(x => x.Id) + 1;
             int annotationId = root.Annotations.Max(x => x.Id) + 1;
@@ -186,7 +197,7 @@ namespace Rocks.Tools.Dataset
 
                 using Mat img = new(Path.Combine(imagesFodler, image.FileName));
 
-                foreach (var i in Enumerable.Range(0, applysToOneImage))
+                foreach (int i in Enumerable.Range(0, applysToOneImage))
                 {
                     var newImg = Copy(image);
                     var newAnnotations = Copy(root.Annotations.Where(x => x.ImageId == newImg.Id).ToList())
@@ -256,7 +267,7 @@ namespace Rocks.Tools.Dataset
         /// <param name="trainPath">путь до тренировочного датасета</param>
         /// <param name="testImagesFolder">путь до папки изображений тестового датасета</param>
         /// <param name="trainImagesFolder">путь до папки изображений тренировочного датасета</param>
-        public static void Split(string inputImagesFolder, string inputPath, string testPath, string trainPath, string testImagesFolder, string trainImagesFolder)
+        public static void Split(string inputImagesFolder, string inputPath, string testPath, string trainPath, string testImagesFolder, string trainImagesFolder, double trainChance = 0.8)
         {
             var train = JsonConvert.DeserializeObject<Root>(File.ReadAllText(inputPath));
             var test = JsonConvert.DeserializeObject<Root>(File.ReadAllText(inputPath));
@@ -265,7 +276,7 @@ namespace Rocks.Tools.Dataset
             test.Annotations = new();
 
             Random rnd = new(111);
-            var testImg = train.Images.Where(_ => rnd.NextDouble() >= 0.8).ToList();
+            var testImg = train.Images.Where(_ => rnd.NextDouble() >= trainChance).ToList();
 
             foreach (var img in testImg)
             {
@@ -301,6 +312,7 @@ namespace Rocks.Tools.Dataset
         {
             var root = JsonConvert.DeserializeObject<Root>(File.ReadAllText(input));
 
+            Console.WriteLine($"Все полигоны валидны {root.Annotations.All(x => x.Segmentation.All(x => x.Count >= 6))}");
             Console.WriteLine($"Каждое изображение в папке описано в аннотации {Directory.GetFiles(imageFolder).Select(x => Path.GetFileName(x)).All(x => root.Images.Any(i => i.FileName == x))}");
             Console.WriteLine($"Каждое изображение существует {root.Images.All(x => File.Exists(Path.Combine(imageFolder, x.FileName)))}");
             Console.WriteLine($"Каждое изображение имеет аннотацию {root.Images.All(x => root.Annotations.Where(a => a.ImageId == x.Id).Any())}");
