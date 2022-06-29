@@ -1,7 +1,7 @@
 import pickle
 import os
 from detectron2.utils.logger import setup_logger
-from datasets import *
+from rockDatasets import *
 import torch
 from utils import *
 import torch

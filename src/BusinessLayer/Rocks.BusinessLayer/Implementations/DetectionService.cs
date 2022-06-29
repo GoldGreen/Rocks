@@ -43,19 +43,11 @@ namespace Rocks.BusinessLayer.Implementations
             return new Rect(intBbox[0], intBbox[1], intBbox[2] - intBbox[0], intBbox[3] - intBbox[1]);
         }
 
-        private static List<List<Point>> Convert(List<List<double>> polygones)
+        private static List<List<Point>> Convert(List<List<PointDto>> polygones)
         {
-            return polygones.Select
-            (
-                p =>
-                {
-                    var x = p.Where((_, i) => i % 2 == 0);
-                    var y = p.Where((_, i) => i % 2 != 0);
-
-                    return x.Zip(y, (x, y) => new Point(x, y))
+            return polygones.Select(p => p.Select(x => new Point(x.X, x.Y))
+                                          .ToList())
                             .ToList();
-                }
-            ).ToList();
         }
 
         private static double CalculateArea(List<List<Point>> points)

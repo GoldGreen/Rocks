@@ -1,4 +1,4 @@
-from datasets import *
+from rockDatasets import *
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.data import build_detection_test_loader
 from detectron2.engine import DefaultPredictor

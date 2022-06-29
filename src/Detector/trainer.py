@@ -22,16 +22,16 @@ def custom_mapper(dataset_dict):
     dataset_dict = copy.deepcopy(dataset_dict)
     image = utils.read_image(dataset_dict["file_name"], format="BGR")
     transform_list = [
-        T.RandomApply(T.RandomBrightness(0.8, 1.2), prob=0.15),
-        T.RandomApply(T.RandomContrast(0.9, 1.1), prob=0.15),
-        T.RandomApply(T.RandomSaturation(0.8, 1.4), prob=0.15),
+        T.RandomApply(T.RandomBrightness(0.75, 1.25), prob=0.19),
+        T.RandomApply(T.RandomContrast(0.85, 1.15), prob=0.19),
+        T.RandomApply(T.RandomSaturation(0.75, 1.45), prob=0.19),
         T.RandomApply(T.RandomRotation(
             angle=list(range(10, 180, 10)), sample_style="choice"), prob=0.1),
         T.RandomFlip(prob=0.25, horizontal=True, vertical=False),
         T.RandomFlip(prob=0.25, horizontal=False, vertical=True),
         T.RandomApply(T.RandomCrop(
-            "relative_range", (0.45, 0.45)), prob=0.15),
-        T.Resize((900, 900))
+            "relative_range", (0.35, 0.35)), prob=0.15),
+        T.Resize((800, 800))
     ]
     image, transforms = T.apply_transform_gens(transform_list, image)
     dataset_dict["image"] = torch.as_tensor(

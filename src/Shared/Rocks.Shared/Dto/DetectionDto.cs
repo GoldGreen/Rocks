@@ -16,6 +16,6 @@ namespace Rocks.Shared.Dto
         public List<double> Bbox { get; set; }
 
         [JsonProperty("polygon")]
-        public List<List<double>> Polygon { get; set; }
+        public List<List<PointDto>> Polygon { get; set; }
     }
 }
