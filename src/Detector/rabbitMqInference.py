@@ -5,12 +5,10 @@ import os
 import json
 import pickle
 
-from utils import *
-
 import pika
 import cv2
 import numpy as np
-from utils import *
+from dto import *
 
 cfg_save_path = "IS_rocks_cfg.pickle"
 with open(cfg_save_path, 'rb') as f:
@@ -37,7 +35,7 @@ def on_request(ch, method, props, body):
 
     outputs = predictor(mat)
     predictions = outputs["instances"].to("cpu")
-    detectonResult = get_result(predictions,mat.shape[0], mat.shape[1])
+    detectonResult = get_result(predictions, mat.shape[0], mat.shape[1])
 
     ch.basic_publish(exchange='',
                      routing_key=props.reply_to,

@@ -275,7 +275,7 @@ namespace Rocks.Tools.Dataset
             test.Images = new();
             test.Annotations = new();
 
-            Random rnd = new(111);
+            Random rnd = new(1243453);
             var testImg = train.Images.Where(_ => rnd.NextDouble() >= trainChance).ToList();
 
             foreach (var img in testImg)
