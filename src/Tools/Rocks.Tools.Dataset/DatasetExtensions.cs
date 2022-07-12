@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using OpenCvSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -317,6 +318,38 @@ namespace Rocks.Tools.Dataset
             Console.WriteLine($"Каждое изображение существует {root.Images.All(x => File.Exists(Path.Combine(imageFolder, x.FileName)))}");
             Console.WriteLine($"Каждое изображение имеет аннотацию {root.Images.All(x => root.Annotations.Where(a => a.ImageId == x.Id).Any())}");
             Console.WriteLine($"Каждая аннотация имеет изображение {root.Annotations.All(x => root.Images.Where(a => a.Id == x.ImageId).Count() == 1)}");
+        }
+
+        public static void CreateMasks(string inputImagesFolder, string inputPath, string outputFolder, string outputAnnotation, int count = 10)
+        {
+            var input = JsonConvert.DeserializeObject<Root>(File.ReadAllText(inputPath));
+            List<object> result = new();
+            for (int i = 0; i < count && i < input.Images.Count; i++)
+            {
+                var image = input.Images[i];
+                var annotations = input.Annotations.Where(x => x.ImageId == image.Id).ToList();
+                var points = annotations.Select(x => x.Segmentation)
+                                         .SelectMany(x => x.Select(z =>
+                                         {
+                                             var x = z.Where((_, i) => i % 2 == 0)
+                                                  .ToList();
+
+                                             var y = z.Where((_, i) => i % 2 != 0)
+                                                  .ToList();
+
+                                             return x.Zip(y, (x, y) => new Point(x, y)).ToList();
+                                         })).ToList();
+
+                using Mat mat = new(Path.Combine(inputImagesFolder, image.FileName));
+                using var mask = mat.EmptyClone();
+                Cv2.DrawContours(mask, points, -1, Scalar.White, -1);
+
+                Cv2.ImWrite(Path.Combine(outputFolder, image.FileName), mat);
+                Cv2.ImWrite(Path.Combine(outputFolder, $"mask_{image.FileName}"), mask);
+                result.Add(new {Image= image.FileName,Mask= $"mask_{image.FileName}" });
+            }
+
+            File.WriteAllText(outputAnnotation, JsonConvert.SerializeObject(result));
         }
     }
 }

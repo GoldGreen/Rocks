@@ -27,16 +27,17 @@ namespace Rocks.Tools.Dataset
             string testPath = Path.Combine(root, "test");
             string testAnnotation = Path.Combine(root, "test_annotation.json");
 
+            DatasetExtensions.CreateMasks(trainPath, trainAnnotation, @"C:\Program Files (x86)\TensorTeach\dataset", @"C:\Program Files (x86)\TensorTeach\dataset\annotation.json", 20);
 
             //foreach (string path in annotationsPaths)
             //{
             //    DatasetExtensions.PrepP rocess(path, path);
             //}
 
-            DatasetExtensions.Concat(annotationsPaths, output);
+            //DatasetExtensions.Concat(annotationsPaths, output);
             //DatasetExtensions.AddBackground(backgroundRoot, imageRoot, output, output, 1, 0.9, 0.38);
-            DatasetExtensions.CheckImages(imageRoot, output);
-            DatasetExtensions.Split(imageRoot, output, testAnnotation, trainAnnotation, testPath, trainPath, 0.85);
+            //DatasetExtensions.CheckImages(imageRoot, output);
+            //DatasetExtensions.Split(imageRoot, output, testAnnotation, trainAnnotation, testPath, trainPath, 0.85);
 
 
             //string root = @"d:\downloads\rock_check\dmitr";
